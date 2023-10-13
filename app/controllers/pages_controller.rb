@@ -5,7 +5,7 @@ class PagesController < ApplicationController
   def index
     @pages = Page.all
 
-    render json: @pages
+    render json: @pages 
   end
 
   # GET /pages/1
