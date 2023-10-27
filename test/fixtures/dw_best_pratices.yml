@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  metadata: false
+  version: false
+  license: false
+  page: one
+  open_gov_principle: one
+
+two:
+  metadata: false
+  version: false
+  license: false
+  page: two
+  open_gov_principle: two

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  false_positive: false
+  analysis_date: 2023-10-27
+  page: one
+  dw_best_pratice: one
+  open_gov_principle: one
+
+two:
+  false_positive: false
+  analysis_date: 2023-10-27
+  page: two
+  dw_best_pratice: two
+  open_gov_principle: two
