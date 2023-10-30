@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  completeness: false
+  primacy: false
+  timeliness: false
+  easy_phisical_or_eletronic_access: false
+  machine_readability: false
+  non_discrimination: false
+  commonly_owned_or_open_standards: false
+  licensing: false
+  permanence: false
+  usage_costs: false
+  site: one
+
+two:
+  completeness: false
+  primacy: false
+  timeliness: false
+  easy_phisical_or_eletronic_access: false
+  machine_readability: false
+  non_discrimination: false
+  commonly_owned_or_open_standards: false
+  licensing: false
+  permanence: false
+  usage_costs: false
+  site: two
