@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_30_141158) do
+ActiveRecord::Schema.define(version: 2023_11_01_140351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -55,17 +55,17 @@ ActiveRecord::Schema.define(version: 2023_10_30_141158) do
     t.boolean "completeness"
     t.boolean "primacy"
     t.boolean "timeliness"
-    t.boolean "easy_phisical_or_eletronic_access"
+    t.boolean "easy_physical_or_electronic_access"
     t.boolean "machine_readability"
     t.boolean "non_discrimination"
     t.boolean "commonly_owned_or_open_standards"
     t.boolean "licensing"
     t.boolean "permanence"
     t.boolean "usage_costs"
-    t.uuid "site_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["site_id"], name: "index_open_gov_principles_on_site_id"
+    t.uuid "page_id"
+    t.index ["page_id"], name: "index_open_gov_principles_on_page_id"
   end
 
   create_table "pages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -89,6 +89,6 @@ ActiveRecord::Schema.define(version: 2023_10_30_141158) do
   add_foreign_key "analyses", "pages"
   add_foreign_key "dw_best_pratices", "open_gov_principles"
   add_foreign_key "dw_best_pratices", "pages"
-  add_foreign_key "open_gov_principles", "sites"
+  add_foreign_key "open_gov_principles", "pages"
   add_foreign_key "pages", "sites"
 end

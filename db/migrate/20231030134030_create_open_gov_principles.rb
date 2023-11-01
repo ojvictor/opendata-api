@@ -4,7 +4,7 @@ class CreateOpenGovPrinciples < ActiveRecord::Migration[5.2]
       t.boolean :completeness
       t.boolean :primacy
       t.boolean :timeliness
-      t.boolean :easy_phisical_or_eletronic_access
+      t.boolean :easy_physical_or_electronic_access
       t.boolean :machine_readability
       t.boolean :non_discrimination
       t.boolean :commonly_owned_or_open_standards
