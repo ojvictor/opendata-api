@@ -7,7 +7,7 @@ class Page < ApplicationRecord
   def as_json(options={})
     super(
       root: true, 
-      include: [:dw_best_pratices,:open_gov_principles]
+      include: [:site, :dw_best_pratices,:open_gov_principles]
     )
   end
 end
