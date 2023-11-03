@@ -3,9 +3,9 @@ class OpenGovPrinciplesController < ApplicationController
 
   # GET /open_gov_principles
   def index
-    @open_gov_principles = OpenGovPrinciple.all
+    @open_gov_principles = OpenGovPrinciple.all.page(params[:page])
 
-    render json: @open_gov_principles
+    paginate json: @open_gov_principles
   end
 
   # GET /open_gov_principles/1

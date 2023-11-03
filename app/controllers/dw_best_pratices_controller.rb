@@ -3,9 +3,9 @@ class DwBestPraticesController < ApplicationController
 
   # GET /dw_best_pratices
   def index
-    @dw_best_pratices = DwBestPratice.all
+    @dw_best_pratices = DwBestPratice.all.page(params[:page])
 
-    render json: @dw_best_pratices
+    paginate json: @dw_best_pratices
   end
 
   # GET /dw_best_pratices/1
@@ -46,6 +46,6 @@ class DwBestPraticesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def dw_best_pratice_params
-      params.require(:dw_best_pratice).permit(:provide_metadata, :provide_descriptive_metadata, :provide_data_license_info, :provide_data_provenance_info, :provide_version_info, :provide_feedback_info, :provide_bulk_download, :provide_data_up_to_date, :use_persistent_uri_as_dataset_identifier, :use_machine_readable_standardized_formats, :provide_multiple_formats_data, :cite_original_publication, :page_id, :open_gov_principle_id)
+      params.require(:dw_best_pratice).permit(:provide_metadata, :provide_descriptive_metadata, :provide_data_license_info, :provide_data_provenance_info, :provide_version_info, :provide_feedback_info, :provide_bulk_download, :provide_data_up_to_date, :use_persistent_uri_as_dataset_identifier, :use_machine_readable_standardized_formats, :provide_multiple_formats_data, :cite_original_publication, :page, :page_id, :open_gov_principle_id)
     end
 end

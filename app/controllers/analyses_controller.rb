@@ -5,12 +5,12 @@ class AnalysesController < ApplicationController
   def index
     @analyses = Analysis.all
 
-    render json: @analyses
+    paginate json: @analyses.page(params[:page])
   end
 
   # GET /analyses/1
   def show
-    render json: @analysis
+    render json: @analysis 
   end
 
   # POST /analyses
@@ -46,6 +46,6 @@ class AnalysesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def analysis_params
-      params.require(:analysis).permit(:maybe_false_positive, :analysis_date, :provide_api_reference, :page_id, :dw_best_pratice_id, :open_gov_principle_id)
+      params.require(:analysis).permit(:maybe_false_positive, :analysis_date, :provide_api_reference, :page_id, :dw_best_pratice_id, :open_gov_principle_id, :page)
     end
 end

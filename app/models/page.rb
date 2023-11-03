@@ -1,4 +1,6 @@
 class Page < ApplicationRecord
+  paginates_per 25
+
   belongs_to :site
   has_many :analyses
   has_many :dw_best_pratices

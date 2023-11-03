@@ -110,38 +110,43 @@ CSV.foreach(CSV_PATH, headers: true) do |row|
 end
 
 csv_data.each do |sample|
-  site = Site.create!(domain: URI.parse(sample['site']).host, title: URI.parse(sample['site']).host)
-  page = Page.create!(title: URI.parse(sample['site']).host, url: sample['site'], site: site)
-  ogp = OpenGovPrinciple.create!(completeness: completeness(sample), 
-                                 primacy: primacy(sample),
-                                 timeliness: timeliness(sample), 
-                                 easy_physical_or_electronic_access: ease_of_physical_and_eletronic_access(sample), 
-                                 machine_readability: machine_readability(sample), 
-                                 non_discrimination: non_discrimination(sample), 
-                                 commonly_owned_or_open_standards: commonly_owned_or_open_standards(sample), 
-                                 licensing: licensing(sample), 
-                                 permanence: permanence(sample), 
-                                 usage_costs: usage_costs(sample), 
-                                 page: page)
-  dwbp = DwBestPratice.create!(provide_metadata: str_to_boolean(sample['provide_metadata']), 
-                               provide_descriptive_metadata: str_to_boolean(sample['provide_descriptive_metadata']), 
-                               provide_data_license_info: str_to_boolean(sample['provide_data_license_information']), 
-                               provide_data_provenance_info: str_to_boolean(sample['provide_data_provenance_information']), 
-                               provide_version_info: str_to_boolean(sample['provide_a_version_indicator']), 
-                               provide_feedback_info: str_to_boolean(sample['gather_feedback_from_data_consumers']), 
-                               provide_bulk_download: str_to_boolean(sample['provide_bulk_download']), 
-                               provide_data_up_to_date: str_to_boolean(sample['provide_data_up_to_date']), 
-                               use_machine_readable_standardized_formats: str_to_boolean(sample['use_machine_readable_standardized_data_formats']),
-                               use_persistent_uri_as_dataset_identifier: str_to_boolean(sample['use_persistent_URIs_as_identifiers_of_datasets']), 
-                               provide_multiple_formats_data: str_to_boolean(sample['provide_data_in_multiple_formats']), 
-                               cite_original_publication: str_to_boolean(sample['cite_the_original_publication']), 
-                               page: page, open_gov_principle: ogp)
-  anal = Analysis.create!(maybe_false_positive: str_to_boolean(sample['possivel_falso_positivo']),
-                          analysis_date: us_date(sample['data_avaliacao']),
-                          provide_api_reference: str_to_boolean('0'),
-                          page: page,
-                          open_gov_principle: ogp,
-                          dw_best_pratice: dwbp)
+  new_site = Site.new(domain: URI.parse(sample['site']).host, title: URI.parse(sample['site']).host)
+  new_site.save unless Site.exists?(domain: URI.parse(sample['site']).host)
+
+  site = Site.find_by(domain: URI.parse(sample['site']).host)
+  if site.domain == URI.parse(sample['site']).host
+    page = Page.create!(title: URI.parse(sample['site']).host, url: sample['site'], site: site)
+    ogp = OpenGovPrinciple.create!(completeness: completeness(sample), 
+                                   primacy: primacy(sample),
+                                   timeliness: timeliness(sample), 
+                                   easy_physical_or_electronic_access: ease_of_physical_and_eletronic_access(sample), 
+                                   machine_readability: machine_readability(sample), 
+                                   non_discrimination: non_discrimination(sample), 
+                                   commonly_owned_or_open_standards: commonly_owned_or_open_standards(sample), 
+                                   licensing: licensing(sample), 
+                                   permanence: permanence(sample), 
+                                   usage_costs: usage_costs(sample), 
+                                   page: page)
+    dwbp = DwBestPratice.create!(provide_metadata: str_to_boolean(sample['provide_metadata']), 
+                                 provide_descriptive_metadata: str_to_boolean(sample['provide_descriptive_metadata']), 
+                                 provide_data_license_info: str_to_boolean(sample['provide_data_license_information']), 
+                                 provide_data_provenance_info: str_to_boolean(sample['provide_data_provenance_information']), 
+                                 provide_version_info: str_to_boolean(sample['provide_a_version_indicator']), 
+                                 provide_feedback_info: str_to_boolean(sample['gather_feedback_from_data_consumers']), 
+                                 provide_bulk_download: str_to_boolean(sample['provide_bulk_download']), 
+                                 provide_data_up_to_date: str_to_boolean(sample['provide_data_up_to_date']), 
+                                 use_machine_readable_standardized_formats: str_to_boolean(sample['use_machine_readable_standardized_data_formats']),
+                                 use_persistent_uri_as_dataset_identifier: str_to_boolean(sample['use_persistent_URIs_as_identifiers_of_datasets']), 
+                                 provide_multiple_formats_data: str_to_boolean(sample['provide_data_in_multiple_formats']), 
+                                 cite_original_publication: str_to_boolean(sample['cite_the_original_publication']), 
+                                 page: page, open_gov_principle: ogp)
+    anal = Analysis.create!(maybe_false_positive: str_to_boolean(sample['possivel_falso_positivo']),
+                            analysis_date: us_date(sample['data_avaliacao']),
+                            provide_api_reference: str_to_boolean('0'),
+                            page: page,
+                            open_gov_principle: ogp,
+                            dw_best_pratice: dwbp)
+  end
 end
 =begin
 site = Site.create!(domain: URI.parse(sample['site']).host, title: URI.parse(sample['site']).host)

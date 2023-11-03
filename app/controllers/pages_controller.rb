@@ -3,9 +3,9 @@ class PagesController < ApplicationController
 
   # GET /pages
   def index
-    @pages = Page.all
+    @pages = Page.all.page(params[:page])
 
-    render json: @pages
+    paginate json: @pages
   end
 
   # GET /pages/1
@@ -46,6 +46,6 @@ class PagesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def page_params
-      params.require(:page).permit(:title, :url, :site_id)
+      params.require(:page).permit(:title, :url, :site_id, :page)
     end
 end

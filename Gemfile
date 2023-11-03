@@ -9,6 +9,15 @@ gem 'rails', '~> 5.2.8', '>= 5.2.8.1'
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
+# Centralization of locale data collection for Ruby on Rails.
+gem 'rails-i18n', '~> 5.1' # For 5.0.x, 5.1.x and 5.2.x
+# A Scope & Engine based, clean, powerful, customizable 
+# and sophisticated paginator for modern web app frameworks and ORMs
+gem 'kaminari'
+# Paginate in your headers, not in your response body. 
+# This follows the proposed RFC-8288 standard for Web linking.
+gem 'api-pagination'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
