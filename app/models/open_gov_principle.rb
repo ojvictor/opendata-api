@@ -7,9 +7,16 @@ class OpenGovPrinciple < ApplicationRecord
   has_one :site, through: :page
   
   def as_json(options={})
-    super(
-      #root: true, 
-      include: [:dw_best_pratice, :page, :site]
-    )
+    super(options.merge(
+      root: true, 
+      include: {
+        dw_best_pratice: {
+          except: %i[page_id open_gov_principle_id]
+        },
+        page: { only: %i[id url] },
+        site: { only: %i[id domain] }
+      },
+      except: %i[page_id]
+    ))
   end
 end
