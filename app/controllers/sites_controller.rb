@@ -3,9 +3,9 @@ class SitesController < ApplicationController
 
   # GET /sites
   def index
-    @sites = Site.all
+    @sites = Site.all.page(params[:page])
 
-    render json: @sites
+    paginate json: @sites
   end
 
   # GET /sites/1
@@ -46,6 +46,6 @@ class SitesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def site_params
-      params.require(:site).permit(:domain, :title)
+      params.require(:site).permit(:domain, :title, :page)
     end
 end

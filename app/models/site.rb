@@ -3,10 +3,17 @@ class Site < ApplicationRecord
 
   has_many :pages
 
-  def as_json(options={})
-    super(
-      #root: true,
-      #include: [:pages]
-    )
+  def pages_count
+    pages.count
+  end
+
+  def as_json( options={} )
+    super(options.merge(
+      root: true,
+      include: {
+        pages: { only: %i[id title url] }
+      },
+      methods: [:pages_count]
+    ))
   end
 end
