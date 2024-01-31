@@ -7,7 +7,7 @@ class Analysis < ApplicationRecord
 
   def as_json(options={})
     super(options.merge(
-      root: true,
+      #root: true,
       include: {
         page: { only: %i[id] },
         open_gov_principle: { only: %i[id] },

@@ -5,11 +5,15 @@ class DwBestPratice < ApplicationRecord
   belongs_to :open_gov_principle
   has_one :analysis
   has_one :site, through: :page
-  
+
   def as_json(options={})
-    super(
+    super(options.merge(
       #root: true,
-      include: [ :page, :site, :open_gov_principle ]
-    )
+      include: {
+        page: { only: %i[id] },
+        site: { only: %i[id] }
+      },
+      except: %i[page_id open_gov_principle_id]
+    ))
   end
 end

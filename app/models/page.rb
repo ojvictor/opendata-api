@@ -8,12 +8,13 @@ class Page < ApplicationRecord
 
   def as_json(options={})
     super(options.merge(
-      root: true, 
+      #root: true, 
       include: {
-        site: { only: %i[id domain] },
-        dw_best_pratices: {},
-        open_gov_principles: {}
-      }
+        site: { only: %i[id] },
+        dw_best_pratices: { only: %i[id] },
+        open_gov_principles: { only: %i[id] }
+      },
+      except: %i[site_id]
     ))
   end
 end

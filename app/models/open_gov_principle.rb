@@ -10,11 +10,9 @@ class OpenGovPrinciple < ApplicationRecord
     super(options.merge(
       root: true, 
       include: {
-        dw_best_pratice: {
-          except: %i[page_id open_gov_principle_id]
-        },
-        page: { only: %i[id url] },
-        site: { only: %i[id domain] }
+        page: { only: %i[id] },
+        site: { only: %i[id] },
+        dw_best_pratice: { only: %i[id] }
       },
       except: %i[page_id]
     ))

@@ -9,7 +9,7 @@ class Site < ApplicationRecord
 
   def as_json( options={} )
     super(options.merge(
-      root: true,
+      #root: true,
       include: {
         pages: { only: %i[id title url] }
       },
