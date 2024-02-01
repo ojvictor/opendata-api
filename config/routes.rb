@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  resources :analyses
-  resources :dw_best_pratices
-  resources :open_gov_principles
-  resources :pages
-  resources :sites
+  resources :analyses, only: %i[index show]
+  resources :dw_best_pratices, only: %i[index show]
+  resources :open_gov_principles, only: %i[index show]
+  resources :pages, only: %i[index show]
+  resources :sites, only: %i[index show]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

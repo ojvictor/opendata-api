@@ -8,7 +8,7 @@ class OpenGovPrinciple < ApplicationRecord
   
   def as_json(options={})
     super(options.merge(
-      root: true, 
+      #root: true, 
       include: {
         page: { only: %i[id] },
         site: { only: %i[id] },
