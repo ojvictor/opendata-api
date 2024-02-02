@@ -83,6 +83,6 @@ test:
 #
 production:
   <<: *default
+  host: db
   database: ticweb-api_production
-  username: ticweb-api
-  password: <%= ENV['TICWEB-API_DATABASE_PASSWORD'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
