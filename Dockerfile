@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
-FROM ruby:2.5
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+FROM ruby:2.5.9-slim-buster
+
+RUN apt-get update -qq && apt-get install -y --no-install-recommends build-essential libpq-dev nodejs postgresql-client
 WORKDIR /ticweb-api
 COPY Gemfile /ticweb-api/Gemfile
 COPY Gemfile.lock /ticweb-api/Gemfile.lock
