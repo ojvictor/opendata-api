@@ -1,7 +1,18 @@
 # syntax=docker/dockerfile:1
-FROM ruby:2.5.9-slim-buster
+FROM ruby:2.5.9
 
-RUN apt-get update -qq && apt-get install -y --no-install-recommends build-essential libpq-dev nodejs postgresql-client
+SHELL ["/bin/bash", "-c"]
+
+ENV RAILS_ENV=development
+
+RUN apt-get update -qq \ 
+  && apt-get install -y --no-install-recommends build-essential curl libpq-dev postgresql-client \ 
+  && $ curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get update -qq \ 
+  && apt-get install -y --no-install-recommends nodejs \
+  && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
+  && apt-get clean 
+
 WORKDIR /ticweb-api
 COPY Gemfile /ticweb-api/Gemfile
 COPY Gemfile.lock /ticweb-api/Gemfile.lock
