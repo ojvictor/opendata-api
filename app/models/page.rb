@@ -1,4 +1,7 @@
 class Page < ApplicationRecord
+  include PgSearch::Model
+
+  pg_search_scope :search_by_url, against: :url, using: { trigram: { word_similarity: true } }
   paginates_per 25
 
   belongs_to :site

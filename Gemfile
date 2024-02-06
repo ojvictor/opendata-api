@@ -18,6 +18,10 @@ gem 'kaminari'
 # This follows the proposed RFC-8288 standard for Web linking.
 gem 'api-pagination'
 
+# PgSearch builds named scopes that take advantage of 
+# PostgreSQL's full text search.
+gem 'pg_search'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production

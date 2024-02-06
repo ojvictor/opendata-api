@@ -38,7 +38,14 @@ class PagesController < ApplicationController
     @page.destroy
   end
 
+  # SEARCH
+  def search
+    @pages = Page.search_by_url(params[:q]).page(params[:page])
+    render json: { pages: @pages, meta: { total: @pages.total_pages, current: @pages.current_page } }
+  end
+
   private
+    
     # Use callbacks to share common setup or constraints between actions.
     def set_page
       @page = Page.find(params[:id])
