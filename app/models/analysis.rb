@@ -4,12 +4,14 @@ class Analysis < ApplicationRecord
   belongs_to :page
   belongs_to :dw_best_pratice
   belongs_to :open_gov_principle
+  has_one :site, through: :page
 
   def as_json(options={})
     super(options.merge(
       #root: true,
       include: {
         page: { only: %i[id] },
+        site: { only: %i[id] },
         open_gov_principle: { only: %i[id] },
         dw_best_pratice: { only: %i[id] }
       },
