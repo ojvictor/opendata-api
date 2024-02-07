@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: tru
 
 require 'csv'
 require 'date'
@@ -14,33 +14,33 @@ COMPLETENES = %w(provide_metadata provide_descriptive_metadata provide_data_lice
 PRIMACY = %w(provide_data_provenance_information gather_feedback_from_data_consumers)
 
 TIMELINESS = %w(provide_a_version_indicator use_persistent_URIs_as_identifiers_of_datasets provide_bulk_download 
-                possivel_api)
+                possible_api)
 
-EASE_PHYS_ELECT_ACCESS = %w(use_persistent_URIs_as_identifiers_of_datasets provide_bulk_download possivel_api)
+EASE_PHYS_ELECT_ACCESS = %w(use_persistent_URIs_as_identifiers_of_datasets provide_bulk_download possible_api)
 
 MACHINE_READABILITY = %w(use_machine_readable_standardized_data_formats use_persistent_URIs_as_identifiers_of_datasets
                          provide_data_in_multiple_formats)
 
-NON_DISCRIMINATION = %w(use_persistent_URIs_as_identifiers_of_datasets provide_bulk_download possivel_api
+NON_DISCRIMINATION = %w(use_persistent_URIs_as_identifiers_of_datasets provide_bulk_download possible_api
                         cite_the_original_publication provide_data_license_information provide_metadata
                         provide_descriptive_metadata gather_feedback_from_data_consumers)
 
 COMMONLY_OWNED_OPEN_STANDARDS = %w(use_machine_readable_standardized_data_formats provide_data_in_multiple_formats 
                                    gather_feedback_from_data_consumers provide_bulk_download
                                    use_persistent_URIs_as_identifiers_of_datasets
-                                   possivel_api)
+                                   possible_api)
 
 LICENSING = %w(gather_feedback_from_data_consumers cite_the_original_publication)
 
 PERMANENCE = %w(use_persistent_URIs_as_identifiers_of_datasets cite_the_original_publication
-                provide_bulk_download possivel_api provide_a_version_indicator)
+                provide_bulk_download possible_api provide_a_version_indicator)
 
 USAGE_COSTS = %w(use_machine_readable_standardized_data_formats provide_bulk_download
                  possivel_falso_positivo
                  gather_feedback_from_data_consumers)
 =begin
 sample = {"idJson"=>"5806", "site"=>"https://dados.gov.br/dados/conjuntos-dados/25709-quantidade-de-tomadores-de-credito-pessoa-juridica-por-porte-microempresa", 
-          "data_avaliacao"=>"19/10/2023", "possivel_falso_positivo"=>"0", "provide_metadata"=>"1", "provide_descriptive_metadata"=>"1", 
+          "o"=>"19/10/2023", "possivel_falso_positivo"=>"0", "provide_metadata"=>"1", "provide_descriptive_metadata"=>"1", 
           "provide_data_license_information"=>"1", "provide_data_provenance_information"=>"1", "provide_a_version_indicator"=>"1", 
           "gather_feedback_from_data_consumers"=>"0", "provide_bulk_download"=>"0", "provide_data_up_to_date"=>"0", 
           "use_persistent_URIs_as_identifiers_of_datasets"=>"0", "use_machine_readable_standardized_data_formats"=>"1", 
@@ -110,12 +110,12 @@ CSV.foreach(CSV_PATH, headers: true) do |row|
 end
 
 csv_data.each do |sample|
-  new_site = Site.new(domain: URI.parse(sample['site']).host, title: URI.parse(sample['site']).host)
+  new_site = Site.new(domain: URI.parse(sample['site']).host, title: sample['title'])
   new_site.save unless Site.exists?(domain: URI.parse(sample['site']).host)
 
   site = Site.find_by(domain: URI.parse(sample['site']).host)
   if site.domain == URI.parse(sample['site']).host
-    page = Page.create!(title: URI.parse(sample['site']).host, url: sample['site'], site: site)
+    page = Page.create!(title: URI.parse(sample['site']).host, url: sample['site'], title: sample['title'], description: sample['description'], site: site)
     ogp = OpenGovPrinciple.create!(completeness: completeness(sample), 
                                    primacy: primacy(sample),
                                    timeliness: timeliness(sample), 
@@ -140,9 +140,9 @@ csv_data.each do |sample|
                                  provide_multiple_formats_data: str_to_boolean(sample['provide_data_in_multiple_formats']), 
                                  cite_original_publication: str_to_boolean(sample['cite_the_original_publication']), 
                                  page: page, open_gov_principle: ogp)
-    anal = Analysis.create!(maybe_false_positive: str_to_boolean(sample['possivel_falso_positivo']),
-                            analysis_date: us_date(sample['data_avaliacao']),
-                            provide_api_reference: str_to_boolean('0'),
+    anal = Analysis.create!(maybe_false_positive: str_to_boolean(sample['possible_false_positive']),
+                            analysis_date: us_date(sample['analysis_date']),
+                            provide_api_reference: str_to_boolean(sample['provide_api_reference']),
                             page: page,
                             open_gov_principle: ogp,
                             dw_best_pratice: dwbp)
@@ -176,7 +176,7 @@ dwbp = DwBestPratice.create!(provide_metadata: str_to_boolean(sample['provide_me
                              cite_original_publication: str_to_boolean(sample['cite_the_original_publication']), 
                              page: page, open_gov_principle: ogp)
 anal = Analysis.create!(maybe_false_positive: str_to_boolean(sample['possivel_falso_positivo']),
-                        analysis_date: us_date(sample['data_avaliacao']),
+                        analysis_date: us_date(sample['o']),
                         provide_api_reference: str_to_boolean('0'),
                         page: page,
                         open_gov_principle: ogp,
