@@ -5,12 +5,12 @@ class SitesController < ApplicationController
   def index
     @sites = Site.all.page(params[:page])
 
-    paginate json: @sites
+    paginate json: @sites.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count])
   end
 
   # GET /sites/1
   def show
-    render json: @site
+    render json: @site.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count])
   end
 
   # POST /sites
@@ -38,7 +38,14 @@ class SitesController < ApplicationController
     @site.destroy
   end
 
+  # SEARCH /sites/search?q=
+  def search
+    @sites = Site.search_by_domain(params[:q]).page(params[:page])
+    render json: { sites: @sites, meta: { total: @sites.total_pages, current: @sites.current_page } }
+  end
+
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_site
       @site = Site.find(params[:id])
