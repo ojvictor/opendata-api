@@ -2,7 +2,7 @@ class Site < ApplicationRecord
   include PgSearch::Model
 
   pg_search_scope :search_by_domain, against: :domain, using: { trigram: { word_similarity: true } }
-  paginates_per 25
+  paginates_per 1
 
   has_many :pages
 

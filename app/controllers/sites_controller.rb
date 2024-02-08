@@ -5,7 +5,7 @@ class SitesController < ApplicationController
   def index
     @sites = Site.all.page(params[:page])
 
-    paginate json: @sites.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count])
+    render json: { sites: @sites.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count]), meta: {current: @sites.current_page, total: @sites.total_pages} }
   end
 
   # GET /sites/1
