@@ -21,6 +21,8 @@ gem 'api-pagination'
 # PgSearch builds named scopes that take advantage of 
 # PostgreSQL's full text search.
 gem 'pg_search'
+  
+gem 'facets', require: false
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
@@ -53,7 +55,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'faker'
   gem 'pry-rails'
-  gem 'facets', require: false
+  # gem 'facets', require: false
 end
 
 
