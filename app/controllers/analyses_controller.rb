@@ -3,14 +3,14 @@ class AnalysesController < ApplicationController
 
   # GET /analyses
   def index
-    @analyses = Analysis.all
+    @analyses = Analysis.all.page(params[:page])
 
-    paginate json: @analyses.page(params[:page])
+    render json: { analyses: @analyses, meta: { current: @analyses.current_page, total: @analyses.total_pages } }
   end
 
   # GET /analyses/1
   def show
-    render json: @analysis 
+    render json: @analysis
   end
 
   # POST /analyses

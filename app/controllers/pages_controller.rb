@@ -5,7 +5,7 @@ class PagesController < ApplicationController
   def index
     @pages = Page.all.page(params[:page])
 
-    paginate json: @pages
+    render json: { pages: @pages, meta: { current: @pages.current_page, total: @pages.total_pages} }
   end
 
   # GET /pages/1
