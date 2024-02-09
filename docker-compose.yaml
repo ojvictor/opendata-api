@@ -4,10 +4,12 @@ services:
     env_file:
       - .db-development.env
     volumes:
-      - ./storage/db:/var/lib/postgresql/data
+      - ./storage/development/db:/var/lib/postgresql/data
 
   web:
     build: .
+    env_file:
+      - .db-development.env
     command: bash -c "rm -rf tmp/server.pid && bundle exec rails s -p 3000 -b 0.0.0.0"
     volumes:
       - .:/ticweb-api
