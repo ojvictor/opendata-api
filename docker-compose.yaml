@@ -4,7 +4,7 @@ services:
     env_file:
       - .db-production.env
     volumes:
-      - ./storage/db:/var/lib/postgresql/data
+      - ./storage/production/db:/var/lib/postgresql/data
 
   web:
     build: .
