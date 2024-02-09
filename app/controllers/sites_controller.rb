@@ -1,5 +1,5 @@
 class SitesController < ApplicationController
-  before_action :set_site, only: [:show, :update, :destroy]
+  before_action :set_site, only: [:update, :destroy]
 
   # GET /sites
   def index
@@ -11,7 +11,12 @@ class SitesController < ApplicationController
 
   # GET /sites/1
   def show
-    render json: @site.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count])
+
+    @site = Site.includes(:pages).find(params[:id])
+    @pages = @site.pages.page(params[:page]) 
+    # render json: @site.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count])
+    # render json: @site, include: { pages: { only: %i[id title url] } }, methods: [:pages_count], meta: { current: @pages.current_page, total: @pages.total_pages }
+    render json: { site: @site, pages: @pages, meta: { current: @pages.current_page, total: @pages.total_pages } } 
   end
 
   # POST /sites
