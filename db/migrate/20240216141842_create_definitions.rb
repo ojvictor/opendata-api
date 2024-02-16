@@ -3,7 +3,7 @@ class CreateDefinitions < ActiveRecord::Migration[5.2]
     create_table :definitions, id: :uuid do |t|
       t.string :name
       t.text :description
-      t.string :attribute
+      t.string :identifier
 
       t.timestamps
     end

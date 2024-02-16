@@ -12,7 +12,7 @@ class DefinitionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create definition" do
     assert_difference('Definition.count') do
-      post definitions_url, params: { definition: { attribute: @definition.attribute, description: @definition.description, name: @definition.name } }, as: :json
+      post definitions_url, params: { definition: { description: @definition.description, identifier: @definition.identifier, name: @definition.name } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +24,7 @@ class DefinitionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update definition" do
-    patch definition_url(@definition), params: { definition: { attribute: @definition.attribute, description: @definition.description, name: @definition.name } }, as: :json
+    patch definition_url(@definition), params: { definition: { description: @definition.description, identifier: @definition.identifier, name: @definition.name } }, as: :json
     assert_response 200
   end
 
