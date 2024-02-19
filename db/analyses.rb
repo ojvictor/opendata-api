@@ -115,7 +115,7 @@ csv_data.each do |sample|
 
   site = Site.find_by(domain: URI.parse(sample['site']).host)
   if site.domain == URI.parse(sample['site']).host
-    page = Page.create!(title: URI.parse(sample['site']).host, url: sample['site'], title: sample['title'], description: sample['description'], site: site)
+    page = Page.create!(url: sample['site'], title: sample['title'], description: sample['description'], site: site)
     ogp = OpenGovPrinciple.create!(completeness: completeness(sample), 
                                    primacy: primacy(sample),
                                    timeliness: timeliness(sample), 
