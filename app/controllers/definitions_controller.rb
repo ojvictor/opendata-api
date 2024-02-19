@@ -38,6 +38,11 @@ class DefinitionsController < ApplicationController
     @definition.destroy
   end
 
+  def search
+    @definition = Definition.where(identifier: params[:identifier])
+    render json: @definition.first
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_definition
