@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
-  resources :definitions, only: %i[index show] do
+  resources :definitions, path: 'def', as: 'def', only: %i[index show] do
     collection do
       get 'search'
     end
   end
 
-  resources :analyses, only: %i[index show]
+  resources :analyses, path: 'summary', as:'summary', only: %i[index show]
 
-  resources :dw_best_pratices, only: %i[index show]
+  resources :dw_best_pratices, path: 'dwbp', only: %i[index show], as: 'opengov'
 
-  resources :open_gov_principles, only: %i[index show]
+  resources :open_gov_principles, path: 'opengov', only: %i[index show], as: 'opengov'
 
   resources :pages, only: %i[index show] do
     collection do

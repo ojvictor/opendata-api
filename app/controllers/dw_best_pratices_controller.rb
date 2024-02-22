@@ -5,7 +5,7 @@ class DwBestPraticesController < ApplicationController
   def index
     @dw_best_pratices = DwBestPratice.all.page(params[:page])
 
-    paginate json: @dw_best_pratices
+    render json: { dw_best_pratices: @dw_best_pratices, meta: {current: @dw_best_pratices.current_page, total: @dw_best_pratices.total_pages} }
   end
 
   # GET /dw_best_pratices/1
