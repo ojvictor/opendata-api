@@ -22,5 +22,8 @@ Rails.application.routes.draw do
       get 'search'
     end
   end
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  
+  # Catch-all route
+  root to: 'application#routing_forbidden', via: :all 
+  match '*unmatched', to: 'application#routing_error', via: :all
 end
