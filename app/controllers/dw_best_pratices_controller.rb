@@ -4,8 +4,11 @@ class DwBestPraticesController < ApplicationController
   # GET /dw_best_pratices
   def index
     @dw_best_pratices = DwBestPratice.all.page(params[:page])
-
-    render json: { dw_best_pratices: @dw_best_pratices, meta: {current: @dw_best_pratices.current_page, total: @dw_best_pratices.total_pages} }
+    if @dw_best_pratices.empty? && params[:page].present?
+      render json: { error: 'Page not found.' }, status: :not_found
+    else
+      render json: { dw_best_pratices: @dw_best_pratices, meta: {current: @dw_best_pratices.current_page, total: @dw_best_pratices.total_pages} }
+    end
   end
 
   # GET /dw_best_pratices/1
@@ -42,6 +45,8 @@ class DwBestPraticesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_dw_best_pratice
       @dw_best_pratice = DwBestPratice.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Record not found.'}, status: :not_found
     end
 
     # Only allow a trusted parameter "white list" through.

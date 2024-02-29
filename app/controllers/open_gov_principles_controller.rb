@@ -4,7 +4,11 @@ class OpenGovPrinciplesController < ApplicationController
   # GET /open_gov_principles
   def index
     @open_gov_principles = OpenGovPrinciple.all.page(params[:page])
-    render json: { open_gov_principles: @open_gov_principles, meta: {current: @open_gov_principles.current_page, total: @open_gov_principles.total_pages} }
+    if @open_gov_principles.empty? && params[:page].present?
+      render json: { error: 'Page not found.' }, status: :not_found
+    else
+      render json: { open_gov_principles: @open_gov_principles, meta: {current: @open_gov_principles.current_page, total: @open_gov_principles.total_pages} }
+    end
   end
 
   # GET /open_gov_principles/1
@@ -41,6 +45,8 @@ class OpenGovPrinciplesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_open_gov_principle
       @open_gov_principle = OpenGovPrinciple.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Record not found.'}, status: :not_found
     end
 
     # Only allow a trusted parameter "white list" through.

@@ -40,13 +40,19 @@ class DefinitionsController < ApplicationController
 
   def search
     @definition = Definition.where(identifier: params[:identifier])
-    render json: @definition.first
+    if @definition.empty?
+      render json: { error: 'Record not found.' }, status: :not_found
+    else
+      render json: @definition.first
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_definition
       @definition = Definition.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Record not found.'}, status: :not_found
     end
 
     # Only allow a trusted parameter "white list" through.
