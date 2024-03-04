@@ -57,7 +57,7 @@ class SitesController < ApplicationController
     if @sites.empty? && params[:page].present?
       render json: { error: 'Page not found.' }, status: :not_found
     elsif @sites.empty?
-        render json: { error: 'Record not found.' }, status: :not_found
+        render json: { sites: @sites } 
     else
       render json: { sites: @sites, meta: { current: @sites.current_page, total: @sites.total_pages } }
     end

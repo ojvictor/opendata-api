@@ -48,7 +48,7 @@ class PagesController < ApplicationController
     if @pages.empty? && params[:page].present?
       render json: { error: 'Page not found.' }, status: :not_found
     elsif @pages.empty?
-      render json: { error: 'Record not found.' }, status: :not_found
+      render json: { pages: @pages }
     else
       render json: { pages: @pages, meta: { total: @pages.total_pages, current: @pages.current_page } }
     end
