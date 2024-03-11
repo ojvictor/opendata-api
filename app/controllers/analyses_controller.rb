@@ -4,8 +4,11 @@ class AnalysesController < ApplicationController
   # GET /analyses
   def index
     @analyses = Analysis.all.page(params[:page])
-
-    render json: { analyses: @analyses, meta: { current: @analyses.current_page, total: @analyses.total_pages } }
+    if @analyses.empty? && params[:page].present?
+      render json: { error: 'Page not found.' }, status: :not_found
+    else
+      render json: { analyses: @analyses, meta: { current: @analyses.current_page, total: @analyses.total_pages } }
+    end
   end
 
   # GET /analyses/1
@@ -42,6 +45,8 @@ class AnalysesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_analysis
       @analysis = Analysis.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Record not found.'}, status: :not_found
     end
 
     # Only allow a trusted parameter "white list" through.

@@ -4,19 +4,25 @@ class SitesController < ApplicationController
   # GET /sites
   def index
     @sites = Site.all.page(params[:page])
-
-    # render json: { sites: @sites.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count]), meta: {current: @sites.current_page, total: @sites.total_pages} }
-    render json: { sites: @sites.as_json(methods: [:pages_count]), meta: {current: @sites.current_page, total: @sites.total_pages} }
+    if @sites.empty? && params[:page].present?
+      render json: { error: 'Page not found.' }, status: :not_found
+    else
+      render json: { sites: @sites.as_json(methods: [:pages_count]), meta: { current: @sites.current_page, total: @sites.total_pages } }
+    end
   end
 
   # GET /sites/1
   def show
-
     @site = Site.includes(:pages).find(params[:id])
     @pages = @site.pages.page(params[:page]) 
-    # render json: @site.as_json(include: { pages: { only: %i[id title url] } }, methods: [:pages_count])
-    # render json: @site, include: { pages: { only: %i[id title url] } }, methods: [:pages_count], meta: { current: @pages.current_page, total: @pages.total_pages }
-    render json: { site: @site, pages: @pages, meta: { current: @pages.current_page, total: @pages.total_pages } } 
+
+    if @pages.empty? && params[:page].present?
+      render json: { error: 'Page not found.' }, status: :not_found
+    else
+      render json: { site: @site, pages: @pages, meta: { current: @pages.current_page, total: @pages.total_pages } } 
+    end
+  rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Record not found.'}, status: :not_found
   end
 
   # POST /sites
@@ -47,7 +53,14 @@ class SitesController < ApplicationController
   # SEARCH /sites/search?q=
   def search
     @sites = Site.search_by_domain(params[:q]).page(params[:page])
-    render json: { sites: @sites, meta: { total: @sites.total_pages, current: @sites.current_page } }
+
+    if @sites.empty? && params[:page].present?
+      render json: { error: 'Page not found.' }, status: :not_found
+    elsif @sites.empty?
+        render json: { sites: @sites } 
+    else
+      render json: { sites: @sites, meta: { current: @sites.current_page, total: @sites.total_pages } }
+    end
   end
 
   private

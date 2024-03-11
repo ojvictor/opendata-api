@@ -15,7 +15,8 @@ class Page < ApplicationRecord
       include: {
         site: { only: %i[id] },
         dw_best_pratices: { only: %i[id] },
-        open_gov_principles: { only: %i[id] }
+        open_gov_principles: { only: %i[id] },
+        analyses: { only: %i[id] }
       },
       except: %i[site_id]
     ))

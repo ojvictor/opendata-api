@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
-  resources :definitions, only: %i[index show] do
+  resources :definitions, path: 'def', as: 'def', only: %i[index show] do
     collection do
       get 'search'
     end
   end
 
-  resources :analyses, only: %i[index show]
+  resources :analyses, path: 'summary', as:'summary', only: %i[index show]
 
-  resources :dw_best_pratices, only: %i[index show]
+  resources :dw_best_pratices, path: 'dwbp', only: %i[index show], as: 'opengov'
 
-  resources :open_gov_principles, only: %i[index show]
+  resources :open_gov_principles, path: 'opengov', only: %i[index show], as: 'opengov'
 
   resources :pages, only: %i[index show] do
     collection do
@@ -22,5 +22,8 @@ Rails.application.routes.draw do
       get 'search'
     end
   end
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  
+  # Catch-all route
+  root to: 'application#routing_forbidden', via: :all 
+  match '*unmatched', to: 'application#routing_error', via: :all
 end
