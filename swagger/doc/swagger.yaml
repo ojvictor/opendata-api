@@ -1,0 +1,1286 @@
+openapi: 3.0.3
+info:
+    title: Observatório de Dados Abertos para Governança
+    description: Api de acesso as informações de dados abertos que levam em conta os 10 princípios de Governança e as Boas Práticas para Dados na Web.
+    contact:
+        name: João Bárbara
+        url: dadosabertos.dcc.ufmg.br
+        email: jvictor@dcc.ufmg.br
+    version: "1.0"
+servers:
+    - url: http://dadosabertos.dcc.ufmg.br/
+paths:
+    /sites:
+        get:
+            tags:
+                - sites
+            summary: Lista os portais de dados abertos analisados levando em conta os 10 Princípios de Governança e as Boas Práticas para Dados na Web. 
+            description: Apresenta as informações coletadas nos portais de dados abertos. 
+            operationId: sites#index
+            parameters:
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/SitesResponseBody'
+                                example:
+                                      {
+                                        sites: 
+                                            [
+                                                {
+                                                    id: "92f6da15-146e-462d-ab69-44dadc93b08c",
+                                                    domain: "dados.es.gov.br",
+                                                    title: "Conjuntos de dados - DADOS ABERTOS",
+                                                    created_at: "2024-02-15T12:35:48.624Z",
+                                                    updated_at: "2024-02-15T12:35:48.624Z",
+                                                    description: null,
+                                                    pages_count: 3050
+                                                },
+                                                {
+                                                    id: "7998b845-4aac-4913-89f2-e1ee705c8c2e",
+                                                    domain: "www.dados.mg.gov.br",
+                                                    title: "Conjunto de dados - Portal de Dados Abertos do Estado de Minas Gerais",
+                                                    created_at: "2024-02-15T12:38:23.952Z",
+                                                    updated_at: "2024-02-15T12:38:23.952Z",
+                                                    description: null,
+                                                    pages_count: 1363
+                                                }
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 1 
+
+                                            }
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Page not found."
+                                      }
+
+    /sites/{UUID}:
+      get:
+            tags:
+                - sites
+            summary: Exibe um determinado portal de dados abertos por meio de seu identificador e uma lista das páginas que o compõem.
+            description: Exibe as informações de um determinado portal e uma lista das páginas que o compõem. Para melhor performance, a lista de páginas apresentada eh paginada. As informações da paginacao podem ser encontradas no header ou no objeto meta.
+            operationId: sites#show
+            parameters:
+                - name: UUID
+                  in: path
+                  description: Identificador do portal, do tipo uuid, a ser exibido.
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/SitesResponseBody'
+                                example:
+                                      {
+                                        site: 
+                                            {
+                                                id: "92f6da15-146e-462d-ab69-44dadc93b08c",
+                                                domain: "dados.es.gov.br",
+                                                title: "Conjuntos de dados - DADOS ABERTOS",
+                                                created_at: "2024-02-15T12:35:48.624Z",
+                                                updated_at: "2024-02-15T12:35:48.624Z",
+                                                description: null,
+                                            },
+                                        pages:
+                                            [
+                                                {
+                                                    "id": "01d378dc-3c1c-43d5-937c-f7c6e2241d95",
+                                                    "title": "Conjuntos de dados - Dados Abertos - POA",
+                                                    "url": "https://dadosabertos.poa.br/dataset?_organization_limit=0&organization=eptc",
+                                                    "created_at": "2024-02-19T13:53:09.352Z",
+                                                    "updated_at": "2024-02-19T13:53:09.352Z",
+                                                    "description": null,
+                                                    "site": 
+                                                        {
+                                                            "id": "578aa9fc-1149-49ba-998b-6b9d739c0fcf"
+                                                        },
+                                                    "dw_best_pratices": 
+                                                        [
+                                                            {
+                                                                "id": "2070f3b8-12bc-4d90-b371-42e58dcb0648"
+                                                            }
+                                                        ],
+                                                    "open_gov_principles": 
+                                                        [
+                                                            {
+                                                                "id": "d76a15bd-f13d-4163-993b-e1d4977967a6"
+                                                            }
+                                                        ],
+                                                    "analyses": 
+                                                        [
+                                                            {
+                                                                "id": "4b3bdc82-4209-4e11-8422-48e5cd113e0b"
+                                                            }
+                                                        ]
+                                                },
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 1 
+                                            }
+                                      }
+                "404":
+                  description: 'notFound: Not Found Response'
+                  content:
+                      application/json:
+                          schema:
+                              type: object
+                              items:
+                                  $ref: '#/components/schemas/ErrorResponseBody'
+                              example:
+                                    {
+                                        "error": "Record not found."
+                                    }
+    /sites/search:
+        get:
+            tags:
+                - sites
+            summary: Busca por portais a partir da pesquisa de um parâmetro especifico.
+            description: Retorna uma lista de portais que contenham o termo utilizado como parâmetro na busca.
+            operationId: sites#search
+            parameters:
+                - name: q
+                  in: query
+                  description: Termo a ser pesquisado na url dos portais de dados abertos armazenados.
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/SitesResponseBody'
+                                example:
+                                      {
+                                        sites: 
+                                            [
+                                                {
+                                                    id: "92f6da15-146e-462d-ab69-44dadc93b08c",
+                                                    domain: "dados.es.gov.br",
+                                                    title: "Conjuntos de dados - DADOS ABERTOS",
+                                                    created_at: "2024-02-15T12:35:48.624Z",
+                                                    updated_at: "2024-02-15T12:35:48.624Z",
+                                                    description: null,
+                                                    pages_count: 3050
+                                                },
+                                                {
+                                                    id: "7998b845-4aac-4913-89f2-e1ee705c8c2e",
+                                                    domain: "www.dados.mg.gov.br",
+                                                    title: "Conjunto de dados - Portal de Dados Abertos do Estado de Minas Gerais",
+                                                    created_at: "2024-02-15T12:38:23.952Z",
+                                                    updated_at: "2024-02-15T12:38:23.952Z",
+                                                    description: null,
+                                                    pages_count: 1363
+                                                }
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 1 
+                                            }
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Record not found."
+                                      }
+
+
+    /pages:
+        get:
+            tags:
+                - pages
+            summary: Lista todas as páginas de portais de dados abertos analisados.
+            description: Apresenta uma lista paginada de todos as páginas de portais de dados abertos analisados. 
+            operationId: pages#index
+            parameters:
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/PagesResponseBody'
+                                example:
+                                      {
+                                        pages: 
+                                            [
+                                                {
+                                                    "id": "4dc69406-b235-486c-885f-a7a265ee2d4f",
+                                                    "title": "Conjuntos de dados - DADOS ABERTOS",
+                                                    "url": "https://dados.es.gov.br/dataset?license_id=cc-by&groups=desenvolvimento-urbano-e-regional",
+                                                    "created_at": "2024-02-16T16:42:45.980Z",
+                                                    "updated_at": "2024-02-16T16:42:45.980Z",
+                                                    "description": "Plataforma online com o objetivo de facilitar o acesso aos dados gerados pelos orgaos do Governo do Estado do Espirito Santo",
+                                                    "site": 
+                                                        {
+                                                            "id": "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                                        },
+                                                    "dw_best_pratices": 
+                                                        [
+                                                            {
+                                                                "id": "d3c850b9-fa09-4062-9f9c-4c0b2546386f"
+                                                            }
+                                                        ],
+                                                    "open_gov_principles": 
+                                                        [
+                                                            {
+                                                                "id": "ac327c80-eb8e-4125-a062-5daf2fd590b0"
+                                                            }
+                                                        ],
+                                                    "analyses": 
+                                                        [
+                                                            {
+                                                                "id": "b6c22c12-0f64-4104-bf1a-ba00e96d5c99"
+                                                            }
+                                                        ]
+                                                }
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 122 
+                                            }
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Page not found."
+                                      }
+
+    /pages/{UUID}:
+        get:
+            tags:
+                - pages
+            summary: Exibe uma determinada pagina de um portal de dados abertos por meio de um identificador.
+            description: Exibe uma determinada página de um portal de dados abertos levando em conta um identificador do tipo uuid.
+            operationId: pages#show
+            parameters:
+                - name: UUID
+                  in: path
+                  description: Identificador de uma determinada página, do tipo uuid, a ser exibido.
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/PagesResponseBody'
+                                example:
+                                      {
+                                          "id": "4dc69406-b235-486c-885f-a7a265ee2d4f",
+                                          "title": "Conjuntos de dados - DADOS ABERTOS",
+                                          "url": "https://dados.es.gov.br/dataset?license_id=cc-by&groups=desenvolvimento-urbano-e-regional",
+                                          "created_at": "2024-02-16T16:42:45.980Z",
+                                          "updated_at": "2024-02-16T16:42:45.980Z",
+                                          "description": "Plataforma online com o objetivo de facilitar o acesso aos dados gerados pelos orgaos do Governo do Estado do Espirito Santo",
+                                          "site": 
+                                              {
+                                                  "id": "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                              },
+                                          "dw_best_pratices": 
+                                              [
+                                                  {
+                                                      "id": "d3c850b9-fa09-4062-9f9c-4c0b2546386f"
+                                                  }
+                                              ],
+                                          "open_gov_principles": 
+                                              [
+                                                  {
+                                                      "id": "ac327c80-eb8e-4125-a062-5daf2fd590b0"
+                                                  }
+                                              ],
+                                          "analyses": 
+                                              [
+                                                  {
+                                                      "id": "b6c22c12-0f64-4104-bf1a-ba00e96d5c99"
+                                                  }
+                                              ]
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Record not found."
+                                      }
+
+    /pages/search:
+        get:
+            tags:
+                - pages
+            summary: Busca por páginas apartir da pesquisa um parâmetro de especifico.
+            description: Exibe uma lista de páginas apartir da pesquisa do parâmetro de busca. Para garantir performance, os resultados exibidos sao paginados.
+            operationId: pages#search
+            parameters:
+                - name: q
+                  in: query
+                  description: Termo de busca que sera utilizado na pesquisa de páginas. 
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: true
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/PagesResponseBody'
+                                example:
+                                      {
+                                        pages: 
+                                            [
+                                                {
+                                                    "id": "4dc69406-b235-486c-885f-a7a265ee2d4f",
+                                                    "title": "Conjuntos de dados - DADOS ABERTOS",
+                                                    "url": "https://dados.es.gov.br/dataset?license_id=cc-by&groups=desenvolvimento-urbano-e-regional",
+                                                    "created_at": "2024-02-16T16:42:45.980Z",
+                                                    "updated_at": "2024-02-16T16:42:45.980Z",
+                                                    "description": "Plataforma online com o objetivo de facilitar o acesso aos dados gerados pelos orgaos do Governo do Estado do Espirito Santo",
+                                                    "site": 
+                                                        {
+                                                            "id": "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                                        },
+                                                    "dw_best_pratices": 
+                                                        [
+                                                            {
+                                                                "id": "d3c850b9-fa09-4062-9f9c-4c0b2546386f"
+                                                            }
+                                                        ],
+                                                    "open_gov_principles": 
+                                                        [
+                                                            {
+                                                                "id": "ac327c80-eb8e-4125-a062-5daf2fd590b0"
+                                                            }
+                                                        ],
+                                                    "analyses": 
+                                                        [
+                                                            {
+                                                                "id": "b6c22c12-0f64-4104-bf1a-ba00e96d5c99"
+                                                            }
+                                                        ]
+                                                }
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 122 
+                                            }
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Record not found."
+                                      }
+
+    /dwbp:
+        get:
+            tags:
+                - dwbp
+            summary: Exibe os indicadores das Boas Práticas de Dados na Web para todas as páginas de portais de dados abertos.
+            description: Apresenta um conjunto de indicadores relacionados as Boas Práticas de Dados Abertos para cada uma das páginas de portais de dados abertos. 
+            operationId: dwbp#index
+            parameters:
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/DWBPResponseBody'
+                                example:
+                                      {
+                                        dw_best_pratices: 
+                                            [
+                                                {
+                                                    id: "92f6da15-146e-462d-ab69-44dadc93b08c",
+                                                    provide_metadata: true,
+                                                    provide_descriptive_metadata: false,
+                                                    provide_data_license_info: true,
+                                                    provide_data_provenance_info: false,
+                                                    provide_version_info: true,
+                                                    provide_feedback_info: false,
+                                                    provide_bulk_download: false,
+                                                    provide_data_up_to_date: true,
+                                                    use_persistent_uri_as_dataset_identifier: false,
+                                                    use_machine_readable_standardized_formats": false,
+                                                    provide_multiple_formats_data": true,
+                                                    cite_original_publication": false,
+                                                    created_at: "2024-02-15T12:35:48.624Z",
+                                                    updated_at: "2024-02-15T12:35:48.624Z",
+                                                    page: 
+                                                        {
+                                                            "id": "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                                        },
+                                                    site: 
+                                                        {
+                                                            "id": "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                                        },
+                                                },
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 198 
+                                            }
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Page not found."
+                                      }
+
+    /dwbp/{UUID}:
+        get:
+            tags:
+                - dwbp
+            summary: Exibe os indicadores relacionados as Boas Práticas de Dados na Web para uma determinada página de um portal de dados abertos.
+            description: Apresenta o conjunto de indicadores relacionados as Boas Práticas de Dados Abertos para uma página de um portal de dados abertos.
+            operationId: dwbp#show
+            parameters:
+                - name: UUID
+                  in: path
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/DWBPResponseBody'
+                                example:
+                                      {
+                                          id: "92f6da15-146e-462d-ab69-44dadc93b08c",
+                                          provide_metadata: true,
+                                          provide_descriptive_metadata: false,
+                                          provide_data_license_info: true,
+                                          provide_data_provenance_info: false,
+                                          provide_version_info: true,
+                                          provide_feedback_info: false,
+                                          provide_bulk_download: false,
+                                          provide_data_up_to_date: true,
+                                          use_persistent_uri_as_dataset_identifier: false,
+                                          use_machine_readable_standardized_formats": false,
+                                          provide_multiple_formats_data": true,
+                                          cite_original_publication": false,
+                                          created_at: "2024-02-15T12:35:48.624Z",
+                                          updated_at: "2024-02-15T12:35:48.624Z",
+                                          page: 
+                                              {
+                                                  "id": "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                              },
+                                          site: 
+                                              {
+                                                  "id": "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                              },
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Record not found."
+                                      }
+
+    /opengov:
+        get:
+            tags:
+                - opengov
+            summary: Exibe um conjunto de indicadores relacinados aos 10 Princípios de Governança em páginas de portais de dados abertos.
+            description: Apresenta um conjunto de indicadores relacionados aos 10 Princípios de Governança em páginas de portais de dados abertos.
+            operationId: opengov#index
+            parameters:
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/OpenGovResponseBody'
+                                example:
+                                      {
+                                        open_gov_principles: 
+                                            [
+                                                {
+                                                    id: "8ad63b5f-ae0c-4d71-8d67-9a22a917729e",
+                                                    completeness: false,
+                                                    primacy: false,
+                                                    timeliness: false,
+                                                    easy_physical_or_electronic_access: false,
+                                                    machine_readability: false,
+                                                    non_discrimination: false,
+                                                    commonly_owned_or_open_standards: false,
+                                                    licensing: false,
+                                                    permanence: false,
+                                                    usage_costs: false,
+                                                    created_at: "2024-02-15T12:35:48.650Z",
+                                                    updated_at: "2024-02-15T12:35:48.650Z",
+                                                    page: 
+                                                        {
+                                                            id: "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                                        },
+                                                    site: 
+                                                        {
+                                                            id: "92f6da15-146e-462d-ab69-44dadc93b08c" 
+                                                        },
+                                                    dw_best_pratice: 
+                                                        {
+                                                            id: "d46d66d9-fc5c-4882-81fa-f957d33a4146"
+                                                        },
+                                                },
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 198 
+                                            }
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Page not found."
+                                      }
+
+    /opengov/{UUID}:
+        get:
+            tags:
+                - opengov
+            summary: Exibe um conjunto de indicadores relacionados aos 10 Princípios de Governança para uma determinada página em um portal de dados abertos.
+            description: Apresenta um conjunto de indicadores relacionados aos 10 Princípios de Governança para uma determinada página em um portal de dados abertos.
+            operationId: opengov#show
+            parameters:
+                - name: UUID
+                  in: path
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/OpenGovResponseBody'
+                                example:
+                                      {
+                                          id: "8ad63b5f-ae0c-4d71-8d67-9a22a917729e",
+                                          completeness: false,
+                                          primacy: false,
+                                          timeliness: false,
+                                          easy_physical_or_electronic_access: false,
+                                          machine_readability: false,
+                                          non_discrimination: false,
+                                          commonly_owned_or_open_standards: false,
+                                          licensing: false,
+                                          permanence: false,
+                                          usage_costs: false,
+                                          created_at: "2024-02-15T12:35:48.650Z",
+                                          updated_at: "2024-02-15T12:35:48.650Z",
+                                          page: 
+                                              {
+                                                  id: "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                              },
+                                          site: 
+                                              {
+                                                  id: "92f6da15-146e-462d-ab69-44dadc93b08c" 
+                                              },
+                                          dw_best_pratice: 
+                                              {
+                                                  id: "d46d66d9-fc5c-4882-81fa-f957d33a4146"
+                                              },
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Record not found."
+                                      }
+
+    /summary:
+        get:
+            tags:
+                - summary
+            summary: Exibe um sumário de todos os indicadores relacionados a análise das páginas dos portais de dados abertos.
+            description: Apresenta um sumário de todos os indicadores relacionados a análise das páginas dos portais de dados abertos. 
+            operationId: summary#index
+            parameters:
+                - name: page
+                  in: query
+                  description: Número da página corrente. Deve existir e ser menor que o número total de páginas. Casos de páginas que não existem retornarão codigo 404.
+                  allowEmptyValue: false
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/SummaryResponseBody'
+                                example:
+                                      {
+                                        analyses: 
+                                            [
+                                                {
+                                                    id: "b6c22c12-0f64-4104-bf1a-ba00e96d5c99",
+                                                    maybe_false_positive: true,
+                                                    analysis_date: "2024-02-06",
+                                                    provide_api_reference: false,
+                                                    created_at: "2024-02-16T16:42:46.052Z",
+                                                    updated_at: "2024-02-16T16:42:46.052Z",
+                                                    page: 
+                                                        {
+                                                            id: "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                                        },
+                                                    site: 
+                                                        {
+                                                            id: "92f6da15-146e-462d-ab69-44dadc93b08c" 
+                                                        },
+                                                    open_gov_principle: 
+                                                        {
+                                                            id: "ac327c80-eb8e-4125-a062-5daf2fd590b0"  
+                                                        },
+                                                    dw_best_pratice: 
+                                                        {
+                                                            id: "d46d66d9-fc5c-4882-81fa-f957d33a4146"
+                                                        },
+                                                },
+                                            ],
+                                        meta:
+                                            {
+                                                current: 1,
+                                                total: 198 
+                                            }
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Page not found."
+                                      }
+
+    /summary/{UUID}:
+        get:
+            tags:
+                - summary
+            summary: Exibe um sumário de todos os indicadores relacionados a análise de uma determinada página em um portal de dados abertos.
+            description: Apresenta um sumário de todos os indicadores relacionados a análise de um determinada página em um portal de dados abertos.
+            operationId: summary#show
+            parameters:
+                - name: UUID
+                  in: path
+                  description: Número da página corrente.
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/SummaryResponseBody'
+                                example:
+                                      {
+                                          id: "b6c22c12-0f64-4104-bf1a-ba00e96d5c99",
+                                          maybe_false_positive: true,
+                                          analysis_date: "2024-02-06",
+                                          provide_api_reference: false,
+                                          created_at: "2024-02-16T16:42:46.052Z",
+                                          updated_at: "2024-02-16T16:42:46.052Z",
+                                          page: 
+                                              {
+                                                  id: "50443e1d-2de0-4cc7-8413-9efe033ee087"
+                                              },
+                                          site: 
+                                              {
+                                                  id: "92f6da15-146e-462d-ab69-44dadc93b08c" 
+                                              },
+                                          open_gov_principle: 
+                                              {
+                                                  id: "ac327c80-eb8e-4125-a062-5daf2fd590b0"  
+                                              },
+                                          dw_best_pratice: 
+                                              {
+                                                  id: "d46d66d9-fc5c-4882-81fa-f957d33a4146"
+                                              },
+                                      }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Record not found."
+                                      }
+
+    /def:
+        get:
+            tags:
+                - def
+            summary: Apresenta a documentação de todos os indicadores relacionados as Boas Práticas de Dados na Web.
+            description: Exibe a documentação de todos os indicadores relacionados as Boas Práticas de Dados na Web.
+            operationId: def#index
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/DefinitionResponseBody'
+                                example:
+                                        [
+                                            {
+                                                id: "e62b5681-d5fd-4783-b04d-6225a4811ac6",
+                                                name: "Fornecer feedback para o publicador original",
+                                                description: "Alerte sobre erros encontrados, forne&ccedil;a sugest&otilde;es ou elogios, pois os publicadores desejam saber se os dados que disponibilizam s&atilde;o &uacute;teis.", 
+                                                identifier: "provide_feedback_to_original_publisher",
+                                                created_at: "2024-02-16T19:35:10.159Z",
+                                                updated_at: "2024-02-16T19:35:10.159Z"
+                                            }
+                                        ]
+    /def/{UUID}:
+        get:
+            tags:
+                - def
+            summary: Exibe a documentação de um determinado identificador relacionados as Boas Práticas de Dados na Web.
+            description: Apresenta a documentação de um determinado identificador relacionado as Boas Práticas de Dados na Web.
+            operationId: def#show
+            parameters:
+                - name: UUID
+                  in: path
+                  description: Identificador do portal, do tipo uuid, a ser apresentado.
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/DefinitionResponseBody'
+                                example:
+                                        {
+                                            id: "e62b5681-d5fd-4783-b04d-6225a4811ac6",
+                                            name: "Fornecer feedback para o publicador original",
+                                            description: "Alerte sobre erros encontrados, forne&ccedil;a sugest&otilde;es ou elogios, pois os publicadores desejam saber se os dados que disponibilizam s&atilde;o &uacute;teis.", 
+                                            identifier: "provide_feedback_to_original_publisher",
+                                            created_at: "2024-02-16T19:35:10.159Z",
+                                            updated_at: "2024-02-16T19:35:10.159Z"
+                                        }
+                "404":
+                    description: 'notFound: Not Found Response'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/ErrorResponseBody'
+                                example:
+                                      {
+                                          "error": "Record not found."
+                                      }
+
+    /def/search:
+        get:
+            tags:
+                - def
+            summary: Busca a documentação de um identificador, determinado pelo label identifier, relacionado as Boas Práticas de Dados na Web.
+            description: Exibe a documentação de um identificador, determinado pelo label identifier, relacionado as Boas Práticas de Dados na Web.
+            operationId: def#search
+            parameters:
+                - name: identifier
+                  in: query
+                  description: Identificador a ser buscado. 
+                  allowEmptyValue: false
+                  schema:
+                      type: string
+                  required: true
+            responses:
+                "200":
+                    description: OK Response 
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                items:
+                                    $ref: '#/components/schemas/DefinitionResponseBody'
+                                example:
+                                        {
+                                            id: "e62b5681-d5fd-4783-b04d-6225a4811ac6",
+                                            name: "Fornecer feedback para o publicador original",
+                                            description: "Alerte sobre erros encontrados, forne&ccedil;a sugest&otilde;es ou elogios, pois os publicadores desejam saber se os dados que disponibilizam s&atilde;o &uacute;teis.", 
+                                            identifier: "provide_feedback_to_original_publisher",
+                                            created_at: "2024-02-16T19:35:10.159Z",
+                                            updated_at: "2024-02-16T19:35:10.159Z"
+                                        }
+components:
+    schemas:
+        MetaResponseBody:
+            type: object
+            properties:
+                current:
+                    type: integer
+                    example: 2
+                total: 
+                    type: integer
+                    example: 100
+            description: Metadados relacionados a paginaçao, informa o número da página corrente e o total de páginas.
+        SitesResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+                domain: 
+                    type: string
+                    example: dados.es.gov.br
+                title: 
+                    type: string
+                    example: Conjuntos de dados - DADOS ABERTOS
+                created_at: 
+                    type: string 
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                updated_at: 
+                    type: string
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                description: 
+                    type: string
+                    example: Conjuntos de dados
+                pages_count: 
+                    type: integer
+                    example: 3050
+            description: Atributos vinculados a cada portal de dados abertos.
+        SitesIdResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+            description: Identificador de um determinado portal de dados abertos.
+        PagesResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+                title: 
+                    type: string
+                    example: Conjuntos de dados - DADOS ABERTOS
+                url: 
+                    type: string
+                    example: https://dados.es.gov.br/dataset?license_id=cc-by&groups=desenvolvimento-urbano-e-regional
+                created_at: 
+                    type: string 
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                updated_at: 
+                    type: string
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                description: 
+                    type: string
+                    example: Conjuntos de dados
+                site:
+                    $ref: '#/components/schemas/SitesIdResponseBody'
+                dw_best_pratices:
+                    $ref: '#/components/schemas/DWBPIdResponseBody'
+                open_gov_principles:
+                    $ref: '#/components/schemas/OpenGovIdResponseBody'
+                analyses:
+                    $ref: '#/components/schemas/SummaryIdResponseBody'
+            description: Atributos relacionados a uma determinada página de um portal de dados abertos.
+        PagesIdResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+            description: Identificador de uma página relacionada a um determinado portal de dados abertos. 
+        DWBPResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+                provide_metadata: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_descriptive_metadata: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_data_license_info: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_data_provenance_info: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_version_info: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_feedback_info: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_bulk_download: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_data_up_to_date: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                use_persistent_uri_as_dataset_identifier: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                use_machine_readable_standardized_formats: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                provide_multiple_formats_data: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                cite_original_publication: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                dw_best_pratices:
+                    $ref: '#/components/schemas/DWBPIdResponseBody'
+                created_at: 
+                    type: string 
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                updated_at: 
+                    type: string
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                page:
+                    $ref: '#/components/schemas/PagesIdResponseBody'
+                site:
+                    $ref: '#/components/schemas/SitesIdResponseBody'
+            description: Conjuntos de identificadores das Boas Práticas de Dados Abertos de uma determinada página em um portal de dados abertos.
+        DWBPIdResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+            description: Identificador para um conjunto de Boas Práticas de Dados Abertos de uma determinada página em um portal de dados abertos.
+        OpenGovResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+                completeness: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                primacy: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                timeliness: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                easy_physical_or_electronic_access: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                machine_readability: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                non_discrimination: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                commonly_owned_or_open_standards: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                licensing: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                permanence: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                usage_costs: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                created_at: 
+                    type: string 
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                updated_at: 
+                    type: string
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                page:
+                    $ref: '#/components/schemas/PagesIdResponseBody'
+                site:
+                    $ref: '#/components/schemas/SitesIdResponseBody'
+                dw_best_pratice:
+                    $ref: '#/components/schemas/DWBPIdResponseBody'
+            description: Conjunto de identificadores relacionados aos 10 Princípios de Governança de uma determinada página em um portal de dados abertos.
+        OpenGovIdResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+            description: Identificador do conjunto de atributos relacionados aos 10 Principios de Governança.
+        SummaryResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+                maybe_false_positive: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                analysis_date: 
+                    type: string
+                    example: 2024-02-15
+                    format: date
+                provide_api_reference: 
+                    type: boolean
+                    example: Conjuntos de dados - DADOS ABERTOS
+                created_at: 
+                    type: string 
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                updated_at: 
+                    type: string
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                page:
+                    $ref: '#/components/schemas/PagesIdResponseBody'
+                site:
+                    $ref: '#/components/schemas/SitesIdResponseBody'
+                opengov:
+                    $ref: '#/components/schemas/OpenGovIdResponseBody'
+                dw_best_pratice:
+                    $ref: '#/components/schemas/DWBPIdResponseBody'
+            description: Sumário dos metadados relacionados a avaliaçao de uma página de dados abertos.
+        SummaryIdResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+            description: Identificador dos metadados de uma página de dados abertos. 
+        DefinitionResponseBody:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 92f6da15-146e-462d-ab69-44dadc93b08c
+                    format: uuid
+                name: 
+                    type: string
+                    example: Fornecer metadados
+                description: 
+                    type: string
+                    example: Disponibilizar metadados &eacute; requisito importante ao se divulgar dados na Web, uma vez que os emissores e receptores dos dados podem n&atilde;o ter familiaridade pr&eacute;via entre si.
+                identifier: 
+                    type: string
+                    example: provide_metadata
+                created_at: 
+                    type: string 
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+                updated_at: 
+                    type: string
+                    example: 2024-02-15T12:35:48.624Z
+                    format: date-time
+            description: Lista contendo todas as definições dos identificadores das Boas Práticas de Dados Abertos.
+        ErrorResponseBody:
+            type: object
+            properties:
+                error:
+                      type: string
+                      example: Page not found or Record not found.
+            description: Objeto contendo as mensagens de erro da aplicacão.
+tags:
+    - name: sites
+      description: Exibe as informações relacionados aos portais de dados abertos.  
+    - name: pages
+      description: Exibe as informações relacionadas as páginas dos portais de dados abertos.  
+    - name: dwbp
+      description: Exibe as informações relacionados aos indicadores de Boas Práticas para Dados na Web, encontrados nas páginas dos portais.
+    - name: opengov
+      description: Exibe as informações relacionadas aos indicadores dos 10 Principios de Governança na Web, encontrados pela analise dos indicadores de Boas Práticas para Dados na Web.
+    - name: summary
+      description: Exibe o sumário das informações relacionadas a análise das páginas em portais de dados abertos.
+    - name: def
+      description: Exibe a documentação dos indicadores das Boas Práticas de Dados Abertos em uma página de um portal de dados abertos.
